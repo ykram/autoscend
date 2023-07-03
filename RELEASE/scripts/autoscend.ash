@@ -1,4 +1,4 @@
-since r27374;	// track noncombat forcers
+since r27442;	// support replica eagle
 /***
 	autoscend_header.ash must be first import
 	All non-accessory scripts must be imported here
@@ -32,6 +32,7 @@ import <autoscend/auto_zone.ash>
 import <autoscend/iotms/clan.ash>
 import <autoscend/iotms/elementalPlanes.ash>
 import <autoscend/iotms/eudora.ash>
+import <autoscend/iotms/mr2007.ash>
 import <autoscend/iotms/mr2011.ash>
 import <autoscend/iotms/mr2012.ash>
 import <autoscend/iotms/mr2013.ash>
