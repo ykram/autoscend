@@ -317,6 +317,10 @@ WarPlan auto_bestWarPlan()
 	{
 		considerNuns = false;
 	}
+	if(get_property("auto_ignoreFlyer").to_boolean())
+	{
+		considerArena = false;
+	}
 	
 	// Calculate the adventure cost of doing each sidequest.
 	int advCostArena = 0;		//Arena actual cost is 0 adventures... unless you mess it up. TODO: check if messed up.
@@ -545,6 +549,11 @@ boolean warAdventure()
 
 	if(!get_property("auto_hippyInstead").to_boolean())
 	{
+		//Commented out until Green smoke bomb support is added
+		if(auto_warEnemiesRemaining() <= 600 && auto_haveGreyGoose()){
+			auto_log_info("Bringing the Grey Goose to emit some drones at a GrOPs hopefully.");
+			handleFamiliar($familiar[Grey Goose]);
+		}
 		if(!autoAdv(1, $location[The Battlefield (Frat Uniform)]))
 		{
 			set_property("hippiesDefeated", get_property("hippiesDefeated").to_int() + 1);
