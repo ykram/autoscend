@@ -1369,11 +1369,7 @@ boolean L11_unlockHiddenCity()
 		if(item_amount($item[Stone Wool]) == 0 && have_effect($effect[Stone-Faced]) == 0 && cloversAvailable() > 0) 
 		{
 			//use clover to get 2x Stone Wool
-			cloverUsageInit();
-			boolean retval = autoAdv($location[The Hidden Temple]);
-			if(cloverUsageRestart()) retval = autoAdv($location[The Hidden Temple]);
-			cloverUsageFinish();
-			return retval;
+			return autoLuckyAdv($location[The Hidden Temple]);
 		}
 		if(item_amount($item[Stone Wool]) == 0 && have_effect($effect[Stone-Faced]) == 0)
 		{
@@ -2266,6 +2262,7 @@ boolean L11_mauriceSpookyraven()
 		{
 			bat_formBats();
 		}
+		auto_lostStomach(true);
 		if (canSniff($monster[Cabinet of Dr. Limpieza], $location[The Haunted Laundry Room]) && auto_mapTheMonsters())
 		{
 			auto_log_info("Attemping to use Map the Monsters to olfact a Cabinet of Dr. Limpieza.");
@@ -2418,11 +2415,7 @@ boolean L11_redZeppelin()
 			{
 				set_property("choiceAdventure866", 3);
 			}
-			cloverUsageInit();
-			boolean retval = autoAdv(1, $location[A Mob of Zeppelin Protesters]);
-			if(cloverUsageRestart()) retval = autoAdv(1, $location[A Mob of Zeppelin Protesters]);
-			cloverUsageFinish();
-			return retval;
+			return autoLuckyAdv($location[A Mob of Zeppelin Protesters]);
 		}
 	}
 
@@ -2765,6 +2758,7 @@ boolean L11_palindome()
 				}
 				// +item is nice to get that food
 				bat_formBats();
+				auto_lostStomach(true);
 				auto_log_info("Off to the grove for some doofy food!", "blue");
 				autoAdv(1, $location[Whitey\'s Grove]);
 			}
