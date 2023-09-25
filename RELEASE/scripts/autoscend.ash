@@ -1668,7 +1668,7 @@ boolean doTasks()
 	if(my_familiar() == $familiar[Stooper] && pathAllowsChangingFamiliar())
 	{
 		auto_log_info("Avoiding stooper stupor...", "blue");
-		familiar fam = (is100FamRun() ? get_property("auto_100familiar").to_familiar() : $familiar[Mosquito]);
+		familiar fam = (is100FamRun() ? get_property("auto_100familiar").to_familiar() : findNonRockFamiliarInTerrarium());
 		use_familiar(fam);
 	}
 	if(my_inebriety() > inebriety_limit())
@@ -1975,7 +1975,7 @@ void auto_begin()
 	if(my_familiar() == $familiar[Stooper] && pathAllowsChangingFamiliar())
 	{
 		auto_log_info("Avoiding stooper stupor...", "blue");
-		familiar fam = (is100FamRun() ? get_property("auto_100familiar").to_familiar() : $familiar[Mosquito]);
+		familiar fam = (is100FamRun() ? get_property("auto_100familiar").to_familiar() : findNonRockFamiliarInTerrarium());
 		use_familiar(fam);
 	}
 
