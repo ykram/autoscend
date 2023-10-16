@@ -522,6 +522,8 @@ void auto_useBlackMonolith();
 boolean auto_haveAugustScepter();
 void auto_scepterSkills();
 void auto_lostStomach();
+boolean auto_haveJillOfAllTrades();
+void auto_handleJillOfAllTrades();
 
 ########################################################################################################
 //Defined in autoscend/paths/actually_ed_the_undying.ash
@@ -1220,9 +1222,7 @@ boolean pulverizeThing(item it);
 boolean buyableMaintain(item toMaintain, int howMany);
 boolean buyableMaintain(item toMaintain, int howMany, int meatMin);
 boolean buyableMaintain(item toMaintain, int howMany, int meatMin, boolean condition);
-boolean buy_item(item it, int quantity, int maxprice);
-boolean buyUpTo(int num, item it);
-boolean buyUpTo(int num, item it, int maxprice);
+boolean auto_buyUpTo(int num, item it);
 float npcStoreDiscountMulti();
 boolean acquireGumItem(item it);
 boolean acquireTotem();
@@ -1719,7 +1719,7 @@ int doNumberology(string goal, boolean doIt);
 int doNumberology(string goal, boolean doIt, string option);
 boolean auto_have_skill(skill sk);
 boolean have_skills(boolean[skill] array);
-void woods_questStart();
+boolean woods_questStart();
 int howLongBeforeHoloWristDrop();
 boolean hasShieldEquipped();
 boolean careAboutDrops(monster mon);

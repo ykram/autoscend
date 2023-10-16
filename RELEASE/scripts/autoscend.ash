@@ -1,4 +1,4 @@
-since r27557;	// support small path
+since r27637;	// support jill-of-all-trades
 /***
 	autoscend_header.ash must be first import
 	All non-accessory scripts must be imported here
@@ -815,12 +815,12 @@ void initializeDay(int day)
 					//Try to get Antique Accordion early if we possibly can.
 					if(isUnclePAvailable() && ((my_meat() > npc_price($item[Antique Accordion])) && (npc_price($item[Antique Accordion]) != 0)) && !in_glover())
 					{
-						buyUpTo(1, $item[Antique Accordion]);
+						auto_buyUpTo(1, $item[Antique Accordion]);
 					}
 					// Removed "else". In some situations when mafia or supporting scripts are behaving wonky we may completely fail to get an accordion
 					if((isArmoryAvailable()) && (item_amount($item[Antique Accordion]) == 0))
 					{
-						buyUpTo(1, $item[Toy Accordion]);
+						auto_buyUpTo(1, $item[Toy Accordion]);
 					}
 				}
 				acquireTotem();
@@ -895,13 +895,13 @@ void initializeDay(int day)
 			while(acquireHermitItem($item[11-Leaf Clover]));
 			if((item_amount($item[Antique Accordion]) == 0) && (item_amount($item[Aerogel Accordion]) == 0) && isUnclePAvailable() && ((my_meat() > npc_price($item[Antique Accordion])) && (npc_price($item[Antique Accordion]) != 0)) && (auto_predictAccordionTurns() < 10) && !(is_boris() || is_jarlsberg() || is_pete() || isActuallyEd() || in_darkGyffte() || in_plumber() || !in_glover()))
 			{
-				buyUpTo(1, $item[Antique Accordion]);
+				auto_buyUpTo(1, $item[Antique Accordion]);
 			}
 			if(is_boris())
 			{
 				if((item_amount($item[Clancy\'s Crumhorn]) == 0) && (minstrel_instrument() != $item[Clancy\'s Crumhorn]))
 				{
-					buyUpTo(1, $item[Clancy\'s Crumhorn]);
+					auto_buyUpTo(1, $item[Clancy\'s Crumhorn]);
 				}
 			}
 			if(auto_have_skill($skill[Summon Smithsness]) && (my_mp() > (3 * mp_cost($skill[Summon Smithsness]))))
@@ -911,7 +911,7 @@ void initializeDay(int day)
 
 			if(item_amount($item[handful of smithereens]) >= 2)
 			{
-				buyUpTo(2, $item[Ben-Gal&trade; Balm], 25);
+				auto_buyUpTo(2, $item[Ben-Gal&trade; Balm]);
 				cli_execute("make 2 louder than bomb");
 			}
 
@@ -1175,7 +1175,7 @@ boolean Lsc_flyerSeals()
 		{
 			if((item_amount($item[imbued seal-blubber candle]) == 0) && guild_store_available())
 			{
-				buyUpTo(1, $item[seal-blubber candle]);
+				auto_buyUpTo(1, $item[seal-blubber candle]);
 				cli_execute("make imbued seal-blubber candle");
 			}
 			if(item_amount($item[Imbued Seal-Blubber Candle]) > 0)
@@ -1187,8 +1187,8 @@ boolean Lsc_flyerSeals()
 		}
 		else if(guild_store_available() && isHermitAvailable())
 		{
-			buyUpTo(1, $item[figurine of an armored seal]);
-			buyUpTo(10, $item[seal-blubber candle]);
+			auto_buyUpTo(1, $item[figurine of an armored seal]);
+			auto_buyUpTo(10, $item[seal-blubber candle]);
 			if((item_amount($item[Figurine of an Armored Seal]) > 0) && (item_amount($item[Seal-Blubber Candle]) >= 10))
 			{
 				handleSealNormal($item[Figurine of an Armored Seal]);
@@ -1199,7 +1199,7 @@ boolean Lsc_flyerSeals()
 		{
 			if((item_amount($item[Tenderizing Hammer]) == 0) && ((my_meat() >= (npc_price($item[Tenderizing Hammer]) * 2)) && (npc_price($item[Tenderizing Hammer]) != 0)))
 			{
-				buyUpTo(1, $item[Tenderizing Hammer]);
+				auto_buyUpTo(1, $item[Tenderizing Hammer]);
 			}
 			if(item_amount($item[Tenderizing Hammer]) > 0)
 			{
@@ -1786,6 +1786,7 @@ boolean doTasks()
 	auto_buyFireworksHat();
 	auto_CMCconsult();
 	auto_checkTrainSet();
+	prioritizeGoose();
 
 	ocrs_postCombatResolve();
 	beatenUpResolution();
@@ -1849,7 +1850,6 @@ boolean doTasks()
 	auto_voteSetup(0,0,0);
 	auto_setSongboom();
 	if(LX_ForceNC())					return true;
-	prioritizeGoose();
 	if(LX_dronesOut())					return true;
 	if(LM_bond())						return true;
 	if(LX_calculateTheUniverse(false))	return true;
