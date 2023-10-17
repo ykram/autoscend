@@ -456,6 +456,9 @@ void auto_CMCconsult();
 
 ########################################################################################################
 //Defined in autoscend/iotms/mr2022.ash
+boolean auto_haveCursedMagnifyingGlass();
+boolean auto_voidMonster();
+boolean auto_voidMonster(location loc);
 boolean auto_haveCosmicBowlingBall();
 string auto_bowlingBallCombatString(location place, boolean speculation);
 boolean auto_haveCombatLoversLocket();
@@ -1686,6 +1689,7 @@ boolean LX_summonMonster();
 boolean canSummonMonster(monster mon);
 boolean summonMonster(monster mon);
 boolean summonMonster(monster mon, boolean speculative);
+boolean summonedMonsterToday(monster mon);
 boolean handleCopiedMonster(item itm);
 boolean handleCopiedMonster(item itm, string option);
 int maxSealSummons();
