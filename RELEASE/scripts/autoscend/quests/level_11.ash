@@ -470,7 +470,7 @@ boolean LX_unlockManorSecondFloor() {
 		// nose sniff is weak so probably want fairy familiar first. this condition should change if banshee librarian is added as a YR target for killing jar
 		if((item_amount($item[killing jar]) > 0 || is_banished($monster[banshee librarian])) && 
 		auto_have_familiar($familiar[Nosy Nose]) && auto_is_valid($skill[Get a Good Whiff of This Guy]) && 
-		appearance_rates($location[The Haunted Library])[$monster[Writing Desk]] < 100)
+		auto_combat_appearance_rates($location[The Haunted Library])[$monster[Writing Desk]] < 100)
 		{
 			handleFamiliar($familiar[Nosy Nose]);
 		}
@@ -619,8 +619,8 @@ boolean LX_getLadySpookyravensFinestGown() {
 		// easily without changing locations, but Nosy Nose will be turned off once it's no longer the used familiar
 		if(auto_have_familiar($familiar[Nosy Nose]) && auto_is_valid($skill[Get a Good Whiff of This Guy]) && !is100FamRun())
 		{
-			float ornateRate = appearance_rates($location[The Haunted Bedroom])[$monster[animated ornate nightstand]];
-			float elegantRate = appearance_rates($location[The Haunted Bedroom])[$monster[elegant animated nightstand]];
+			float ornateRate = auto_combat_appearance_rates($location[The Haunted Bedroom])[$monster[animated ornate nightstand]];
+			float elegantRate = auto_combat_appearance_rates($location[The Haunted Bedroom])[$monster[elegant animated nightstand]];
 			if($location[The Haunted Bedroom].turns_spent < 6 && elegantRate != 0)
 			{	//non 0 value for elegant before 7 is spurious
 				ornateRate += elegantRate;	//not a real rate but only correct for the purpose of checking if it is 100
@@ -718,7 +718,15 @@ void blackForestChoiceHandler(int choice)
 {
 	if(choice == 923) // All Over the Map (The Black Forest)
 	{
-		run_choice(1); // go to You Found Your Thrill (#924)
+		if(available_choice_options() contains 5) // only available with Candy Cane Sword Cane equipped
+		{
+			run_choice(5); // +8 exploration
+			run_choice(1); // go to You Found Your Thrill (#924)
+		}
+		else
+		{
+			run_choice(1); // go to You Found Your Thrill (#924)
+		}
 	}
 	else if(choice == 924)
 	{
@@ -1559,6 +1567,18 @@ void hiddenCityChoiceHandler(int choice)
 		{
 			run_choice(3); // relocate lawyers to park
 		}
+		else if(available_choice_options() contains 4 && have_effect($effect[Thrice-Cursed]) == 0) // Use CCSC to get Cursed +1
+		{
+			run_choice(4);
+			if(have_effect($effect[Thrice-Cursed]) > 0)
+			{
+				run_choice(1); // fight the spirit
+			}
+			else
+			{
+				run_choice(2); // get cursed
+			}
+		}
 		else
 		{
 			run_choice(2); // get cursed
@@ -1600,12 +1620,18 @@ void hiddenCityChoiceHandler(int choice)
 	}
 	else if(choice == 785) // Air Apparent (An Overgrown Shrine (Northeast))
 	{
+		
 		if(get_property("hiddenOfficeProgress").to_int() == 0)
 		{
 			run_choice(1); // unlock the Hidden Office Building
 		}
 		else if(item_amount($item[crackling stone sphere]) > 0)
 		{
+			if (available_choice_options() contains 4)
+			{
+				run_choice(4); // get free meat
+				run_choice(2); // get the stone triangle
+			}
 			run_choice(2); // get the stone triangle
 		}
 		else
@@ -1645,7 +1671,15 @@ void hiddenCityChoiceHandler(int choice)
 	}
 	else if(choice == 788) // Life is Like a Cherry of Bowls (The Hidden Bowling Alley)
 	{
-		run_choice(1); // bowl for stats 4 times then fight the spirit on 5th occurrence
+		if(available_choice_options() contains 2)
+		{
+			run_choice(2); // bowl for stats 4 times then fight the spirit on 5th occurrence
+			run_choice(1); // bowl for stats 4 times then fight the spirit on 5th occurrence
+		}
+		else
+		{
+			run_choice(1); // bowl for stats 4 times then fight the spirit on 5th occurrence
+		}
 	}
 	else if(choice == 789) // Where Does The Lone Ranger Take His Garbagester? (The Hidden Park)
 	{
@@ -1750,6 +1784,10 @@ boolean L11_hiddenCity()
 		{
 			cursesNeeded = 1;
 		}
+		if(auto_haveCCSC())
+		{
+			cursesNeeded -= 1;
+		}
 		
 		//able to drink, enough liver?
 		if(canDrinkCursedPunch)
@@ -1771,7 +1809,7 @@ boolean L11_hiddenCity()
 			//should we try to force the noncombat?
 			boolean shouldForceElevatorAction = false;
 			
-			if(have_effect($effect[Thrice-Cursed]) > 0)
+			if((have_effect($effect[Thrice-Cursed]) > 0) || (have_effect($effect[Twice-Cursed]) > 0 && auto_haveCCSC()))
 			{
 				shouldForceElevatorAction = true;
 			}
@@ -1822,11 +1860,11 @@ boolean L11_hiddenCity()
 			if(auto_have_familiar($familiar[Nosy Nose]) && auto_is_valid($skill[Get a Good Whiff of This Guy]))
 			{
 				if(have_effect($effect[Thrice-Cursed]) < (turnsUntilElevatorAction + 1)  && 
-				appearance_rates($location[The Hidden Apartment Building])[$monster[pygmy shaman]] < 100)
+				auto_combat_appearance_rates($location[The Hidden Apartment Building])[$monster[pygmy shaman]] < 100)
 				{
 					handleFamiliar($familiar[Nosy Nose]);	//whiff increases chance of shamen. the deleveling can also help survive being cursed
 				}
-				else if(appearance_rates($location[The Hidden Office Building])[$monster[pygmy witch accountant]] >= 20 && item_amount($item[McClusky file (complete)]) == 0)
+				else if(auto_combat_appearance_rates($location[The Hidden Office Building])[$monster[pygmy witch accountant]] >= 20 && item_amount($item[McClusky file (complete)]) == 0)
 				{
 					//once done with curses will want witch accountants
 					if(item_amount($item[McClusky file (page 4)]) == 0 || get_property("nosyNoseMonster").to_monster() == $monster[pygmy witch accountant])
@@ -1908,7 +1946,7 @@ boolean L11_hiddenCity()
 		if(!workingHoliday && missingMcCluskyFiles() > 0)	//need more accountants
 		{
 			if(auto_have_familiar($familiar[Nosy Nose]) && auto_is_valid($skill[Get a Good Whiff of This Guy]) && 
-			appearance_rates($location[The Hidden Office Building])[$monster[pygmy witch accountant]] < 100)
+			auto_combat_appearance_rates($location[The Hidden Office Building])[$monster[pygmy witch accountant]] < 100)
 			{
 				handleFamiliar($familiar[Nosy Nose]);	//whiff increases chance of witch accountant
 			}
@@ -1917,7 +1955,7 @@ boolean L11_hiddenCity()
 		auto_log_info("Hidden Office Progress: " + get_property("hiddenOfficeProgress"), "blue");
 
 		if(workingHoliday && item_amount($item[boring binder clip]) > 0 && missingMcCluskyFiles() > 0 && 
-		appearance_rates($location[The Hidden Apartment Building])[$monster[pygmy witch accountant]] >= (missingMcCluskyFiles() * 25))
+		auto_combat_appearance_rates($location[The Hidden Apartment Building])[$monster[pygmy witch accountant]] >= (missingMcCluskyFiles() * 25))
 		{
 			//Hidden Apartment unmodified 25% chance of accountant is better if only 1 missingMcCluskyFiles
 			//office noncombat is already one guaranteed accountant so with more missingMcCluskyFiles only go Apartment if better rate
@@ -2000,7 +2038,7 @@ boolean L11_hiddenCity()
 		if(surgeonGearWanted > 0)	//need more surgeons?
 		{
 			if(auto_have_familiar($familiar[Nosy Nose]) && auto_is_valid($skill[Get a Good Whiff of This Guy]) && 
-			appearance_rates($location[The Hidden Hospital])[$monster[pygmy witch surgeon]] < 100)
+			auto_combat_appearance_rates($location[The Hidden Hospital])[$monster[pygmy witch surgeon]] < 100)
 			{
 				if(surgeonGearWanted >= 2 || get_property("nosyNoseMonster").to_monster() == $monster[pygmy witch surgeon])
 				{
@@ -2400,7 +2438,14 @@ boolean L11_redZeppelin()
 	// TODO: create lynyrd skin items
 
 	set_property("choiceAdventure856", 1);
-	set_property("choiceAdventure857", 1);
+	if(auto_haveCCSC())
+	{
+		set_property("choiceAdventure857", 2);
+	}
+	else
+	{
+		set_property("choiceAdventure857", 1);
+	}
 	set_property("choiceAdventure858", 1);
 	buffMaintain($effect[Greasy Peasy]);
 	buffMaintain($effect[Musky]);
@@ -2468,6 +2513,10 @@ boolean L11_redZeppelin()
 		}
 		float fire_protestors = item_amount($item[Flamin\' Whatshisname]) > 0 ? 10 : 3;
 		float sleaze_amount = numeric_modifier("sleaze damage") + numeric_modifier("sleaze spell damage");
+		if(auto_haveCCSC())
+		{
+			sleaze_amount = sleaze_amount * 2;
+		}
 		float sleaze_protestors = square_root(sleaze_amount);
 		float lynyrd_protestors = have_effect($effect[Musky]) > 0 ? 6 : 3;
 		foreach it in $items[lynyrdskin cap, lynyrdskin tunic, lynyrdskin breeches]
@@ -2651,6 +2700,10 @@ boolean L11_shenCopperhead()
 					// got priceless diamond or zeppelin ticket (or we are rich) so lets burn the place down (and make Flamin' Whatsisnames)
 					behindtheStacheOption = 3;
 				}
+			}
+			else if (have_equipped($item[Candy Cane Sword Cane]) && (item_amount($item[priceless diamond]) == 0 && item_amount($item[Red Zeppelin Ticket]) == 0))
+			{
+				behindtheStacheOption = 5;
 			}
 			else
 			{

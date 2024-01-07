@@ -53,6 +53,10 @@ void cyrptChoiceHandler(int choice)
 			}
 			run_choice(5); // if meets thresholds, skip to farm more dieting pills in DG
 		}
+		else if(available_choice_options() contains 5)
+		{
+			run_choice(5); // -11 evil, +50 each substat with Candy Cane Sword Cane
+		}
 		else
 		{
 			run_choice(4); // fight swarm of ghuol whelps
@@ -257,7 +261,7 @@ boolean L7_crypt()
 			handleFamiliar($familiar[Space Jellyfish]);
 		}
 		else if(auto_have_familiar($familiar[Nosy Nose]) && auto_is_valid($skill[Get a Good Whiff of This Guy]) && 
-		appearance_rates($location[The Defiled Niche])[$monster[dirty old lihc]] < 100)
+		auto_combat_appearance_rates($location[The Defiled Niche])[$monster[dirty old lihc]] < 100)
 		{
 			boolean nosyOldLihcs;
 			if(get_property("cyrptNicheEvilness").to_int() > (17 + 2*evilBonus))

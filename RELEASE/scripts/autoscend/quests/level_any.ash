@@ -139,7 +139,7 @@ boolean LX_bitchinMeatcar()
 		}
 	}
 	if (item_amount($item[Tires]) > 0 && enginePartsMissing >= 4 && 
-	appearance_rates($location[The Degrassi Knoll Garage])[$monster[Gnollish Gearhead]] < 77.0)
+	auto_combat_appearance_rates($location[The Degrassi Knoll Garage])[$monster[Gnollish Gearhead]] < 77.0)
 	{
 		//all parts of the engine are missing and would take a while to acquire from lootboxes at normal appearance rates
 		if (pullXWhenHaveY($item[meat engine],1,0))
@@ -692,7 +692,19 @@ void dailyDungeonChoiceHandler(int choice, string[int] options)
 			break;
 		case 690: // The First Chest Isn't the Deepest. (Daily Dungeon 5th room)
 		case 691: // Second Chest (Daily Dungeon 10th room)
-			if(options contains 2)
+			if(options contains 4)
+			{
+				run_choice(4); // Get a fat loot token with your Candy Cane Sword Cane
+				if(options contains 2)
+				{
+					run_choice(2);	// skip 3 rooms using ring of Detect Boring Doors
+				} 
+				else
+				{
+					run_choice(3);	// skip 1 room
+				}
+			}
+			else if(options contains 2)
 			{
 				run_choice(2);	// skip 3 rooms using ring of Detect Boring Doors
 			} 
@@ -730,10 +742,14 @@ void dailyDungeonChoiceHandler(int choice, string[int] options)
 			else abort("I made an error and tried to adventure in the daily dungeon when I have no means of handling [I Wanna Be a Door]");
 			break;
 		case 693: // It's Almost Certainly a Trap (Daily Dungeon)
-			if(options contains 2)
+			if(options contains 4)
+			{
+				run_choice(4); // use Candy cane sword cane to skip and get stats
+			}
+			else if(options contains 2)
 			{
 				run_choice(2);	// use eleven-foot pole to skip
-			} 
+			}
 			else
 			{
 				run_choice(1);	// take damage to progress
