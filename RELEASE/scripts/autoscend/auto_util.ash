@@ -775,6 +775,19 @@ boolean adjustForBanishIfPossible(monster enemy, location loc)
 	return false;
 }
 
+boolean auto_wantToFreeRun(monster enemy, location loc)
+{
+	if(appearance_rates(loc)[enemy] <= 0)
+	{
+		return false;
+	}
+	location locCache = my_location();
+	set_location(loc);
+	boolean [monster] monstersToFreeRun = auto_getMonsters("freerun");
+	set_location(locCache);
+	return monstersToFreeRun[enemy];
+}
+
 boolean canFreeRun(monster enemy, location loc)
 {
 	// are there any restrictions on free running?
@@ -3001,7 +3014,7 @@ boolean auto_is_valid(skill sk)
 	// Hack for Legacy of Loathing as is_unrestricted returns false for Source Terminal skills
 	if (in_lol() && $skills[Extract, Turbo, Digitize, Duplicate, Portscan, Compress] contains sk) return true;
 	//do not check check for B in bees hate you path. it only restricts items and not skills.
-	return (glover_usable(sk.to_string()) || sk.passive) && bat_skillValid(sk) && plumber_skillValid(sk) && is_unrestricted(sk);
+	return (glover_usable(sk.to_string()) || (sk.passive && sk != $skill[disco nap])) && bat_skillValid(sk) && plumber_skillValid(sk) && is_unrestricted(sk);
 }
 
 boolean auto_is_valid(effect eff)
