@@ -1,4 +1,4 @@
-since r27897;	// additional monster parts
+since r27955;	// consider free rests from mayam chair
 /***
 	autoscend_header.ash must be first import
 	All non-accessory scripts must be imported here
@@ -616,6 +616,28 @@ boolean LX_doVacation()
 	}
 
 	return autoAdv(1, $location[The Shore\, Inc. Travel Agency]);
+}
+
+boolean auto_doTempleSummit()
+{
+	if(!hidden_temple_unlocked() || internalQuestStatus("questL11Worship") < 3)
+	{
+		return false;
+	}
+	if(available_amount($item[stone wool])==0)
+	{
+		return false;
+	}
+	if (get_property("lastTempleAdventures").to_int()>=my_ascensions())
+	{
+		return false;
+	}
+	buffMaintain($effect[Stone-Faced]);
+	if(have_effect($effect[Stone-Faced]) == 0)
+	{
+		return false;
+	}
+	return autoAdv($location[The Hidden Temple]);
 }
 
 void initializeDay(int day)
@@ -1819,6 +1841,7 @@ boolean doTasks()
 	auto_checkTrainSet();
 	prioritizeGoose();
 	auto_useWardrobe();
+	auto_MayamClaimAll();
 	
 	ocrs_postCombatResolve();
 	beatenUpResolution();
@@ -1898,6 +1921,8 @@ boolean doTasks()
 	auto_lostStomach(false);
 	if(auto_doPhoneQuest())				return true;
 	
+	if(auto_doTempleSummit())		return true;
+	
 	if (process_tasks()) return true;
 
 	auto_log_info("I should not get here more than once because I pretty much just finished all my in-run stuff. Beep", "blue");
@@ -1974,6 +1999,7 @@ void auto_begin()
 	backupSetting("logPreferenceChangeFilter", "maximizerMRUList,testudinalTeachings,auto_maximize_current");
 	backupSetting("maximizerMRUSize", 0); // shuts the maximizer spam up!
 	backupSetting("allowNonMoodBurning", true); // required to be true for burn cli cmd to work properly
+	backupSetting("lastChanceThreshold", 1); // burn command will always use last chance skill, if we have no active buffs
 
 	string charpane = visit_url("charpane.php");
 	if(contains_text(charpane, "<hr width=50%><table"))

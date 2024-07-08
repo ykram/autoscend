@@ -25,6 +25,7 @@ boolean LX_burnDelay();
 boolean LX_calculateTheUniverse(boolean speculative);
 boolean tophatMaker();
 boolean LX_doVacation();
+boolean auto_doTempleSummit();
 void initializeDay(int day);
 boolean dailyEvents();
 boolean Lsc_flyerSeals();
@@ -541,6 +542,7 @@ void auto_useWardrobe();
 
 ########################################################################################################
 //Defined in autoscend/iotms/mr2024.ash
+boolean consumeBlackAndWhiteApronKit();
 boolean auto_haveSpringShoes();
 boolean auto_haveAprilingBandHelmet();
 boolean auto_getAprilingBandItems();
@@ -556,6 +558,13 @@ void dartChoiceHandler(int choice, string[int] options);
 int dartBullseyeChance();
 int dartELRcd();
 skill dartSkill();
+boolean auto_haveMayamCalendar();
+boolean auto_MayamIsUsed(string glyph);
+boolean auto_MayamAllUsed();
+boolean auto_MayamClaimStinkBomb();
+boolean auto_MayamClaimBelt();
+boolean auto_MayamClaimWhatever();
+boolean auto_MayamClaimAll();
 
 ########################################################################################################
 //Defined in autoscend/paths/actually_ed_the_undying.ash
@@ -1821,3 +1830,4 @@ boolean hasUsefulShirt();
 int meatReserve();
 boolean auto_wishForEffect(effect wish);
 item wrap_item(item it);
+boolean auto_burnMP(int mpToBurn);
