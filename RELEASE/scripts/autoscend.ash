@@ -1553,6 +1553,9 @@ boolean autosellCrap()
 			auto_autosell(min(5,item_amount(it)), it);
 		}
 	}
+	if(item_amount($item[Anticheese]) > 0) {
+		put_shop(mall_price($item[Anticheese]), 0, item_amount($item[Anticheese]), $item[Anticheese]);
+	}
 	if(item_amount($item[hot wing]) > 3)
 	{
 		auto_autosell(item_amount($item[hot wing]) - 3, $item[hot wing]);
